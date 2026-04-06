@@ -1,13 +1,568 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ── Reset ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Georgia, serif; background: #f0ece4; }
+
+/* ── Layout base (LayoutReserva) ── */
+.layout-reserva {
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #f5f0eb;
+  padding: 28px 22px;
+  position: relative;
+}
+.btn-back {
+  background: none; border: none;
+  font-size: 20px; cursor: pointer;
+  color: #333; margin-bottom: 8px;
+  padding: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* ── Tipografía ── */
+h1 { font-size: 30px; font-style: italic; text-align: center; margin-bottom: 4px; }
+h2 { font-size: 22px; text-align: center; margin-bottom: 12px; }
+label { display: block; font-family:'Times New Roman', Times, serif, 'Times New Roman', Times, serif; font-weight: bold; font-size: 15.4px; margin-bottom: 8px; margin-top: 30px; }
+
+/* ── Inputs ── */
+input {
+  width: 100%; padding: 12px 16px;
+  border-radius: 8px; border: 1px solid #ddd;
+  font-size: 14px; font-family: Georgia, serif;
+  background: white; outline: none;
 }
+input:focus { border-color: #8B6914; }
+
+/* ── Selector de personas ── */
+.btn-persona {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid #ccc; cursor: pointer;
+  font-weight: bold; font-size: 14px; background: white;
+}
+.btn-persona.activo { background: #8B6914; color: white; border-color: #8B6914; }
+
+/* ── BotónHora ── */
+.btn-hora {
+  padding: 9px 0; border-radius: 20px;
+  border: 1px solid #ccc; cursor: pointer;
+  font-size: 13px; font-family: Georgia, serif;
+  background: white; color: #333;
+}
+.btn-hora.activa { background: #1a1a1a; color: white; border-color: #1a1a1a; }
+
+/* ── Botones principales ── */
+.btn-gold {
+  width: 80%; display: block; padding: 14px; border-radius: 8px;
+  margin:24px auto 0;border: none; background: #B3884D; color: white;
+  font-size: 13px; font-weight: bold; font-style: normal;
+  cursor: pointer; margin-top: 24px; letter-spacing: 1px;
+  font-family: Georgia, serif;
+}
+.btn-gold:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-green {
+  width: 100%; padding: 14px; border-radius: 8px;
+  border: none; background: #2e7d32; color: white;
+  font-size: 14px; font-weight: bold; cursor: pointer;
+  margin-top: 16px; font-family: Georgia, serif;
+}
+.btn-danger {
+  width: 50%; padding: 14px; border-radius: 8px;
+  border: none; background: #c62828; color: white;
+  font-size: 15.3px; cursor:pointer;
+  margin-top: 8px; font-family: Georgia, serif;
+}
+.btn-outline-dark {
+  width: 50%; padding: 14px; border-radius: 8px;
+  border: 1px solid #555; background: white; color: #333;
+  font-size: 14px; cursor: pointer; margin-top: 16px;
+  font-family: Georgia, serif;
+}
+
+/* ── Grid de horas ── */
+.grid-horas {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+
+/* ── TarjetaMesa ── */
+.grid-mesas {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  margin-bottom: 16px;
+}
+.tarjeta-mesa {
+  text-align: center; border-radius: 8px; padding: 6px 4px;
+  cursor: pointer; transition: background 0.15s;
+}
+.tarjeta-mesa.ocupada { cursor: not-allowed; opacity: 0.75; }
+.tarjeta-mesa.seleccionada { background: #e8f5e9; outline: 2px solid #2e7d32; }
+.tarjeta-mesa:hover:not(.ocupada) { background: #f0f0f0; }
+.mesa-icono { font-size: 28px; display: block; }
+.mesa-id { font-size: 11px; font-weight: bold; color: #555; }
+.mesa-estado { font-size: 15px; display: block; margin-top: 2px; }
+
+/* ── Leyenda ── */
+.leyenda { display: flex; gap: 20px; font-size: 13px; margin-bottom: 16px; }
+
+/* ── Modal (B2.T6.1 p.349) ── */
+.modal-backdrop-custom {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.55);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 1050;
+}
+@keyframes fadeIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.modal-dialog {
+  background: white; border-radius: 16px;
+  animation: fadeIn 0.25s ease; padding: 24px;
+  width: 82%; max-width: 300px; text-align: center;
+}
+.modal-title { font-size: 17px; margin-bottom: 12px; font-style: italic; }
+.modal-body { margin-bottom: 12px; font-size: 14px; color: #555; }
+.modal-footer { display: flex; justify-content: center; }
+.btn-close {
+  background: none; border: none; font-size: 18px;
+  cursor: pointer; color: #999; float: right;
+}
+
+/* ── Estados loading / error ── */
+.loading-text { text-align: center; color: #888; font-size: 14px; padding: 20px 0; }
+.error-text { color: #c62828; font-size: 13px; margin: 8px 0; }
+
+/* ── Pantalla Éxito ── */
+.exito-wrapper { text-align: center; padding: 50px 0 20px; }
+.exito-icono {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: #e4f6e5; color: #2e7d32;
+  font-size: 32px; display: flex;
+  align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+}
+.exito-titulo { font-size: 24px; margin-bottom: 20px; }
+.exito-desc { color: #666; line-height: 1.8; font-size: 15px; margin-bottom: 8px; }
+
+/* ── Subtítulo pantalla principal ── */
+.subtitulo { text-align: center; font-size: 13px; color: #888; margin-bottom: 24px; }
+/* ── Encabezado pantalla selección de mesa ── */
+.mesa-fecha {
+  font-size: 14px;
+  margin-top: 16px;
+  color: #555;
+}
+.mesa-hora {
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 20px;   /* ← espacio antes de "Elige tu plaza" */
+  color: #555;
+}
+.mesa-titulo {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+/* ── Leyenda centrada ── */
+.leyenda {
+  display: flex;
+  gap: 28px;
+  justify-content: center;   /* ← centra los dos items */
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+/* ── Botón confirmar plaza (verde, siempre visible al fondo) ── */
+.btn-confirmar-plaza {
+  width: 100%;
+  padding: 15px;
+  margin-top: 24px;
+  border-radius: 10px;
+  border: none;
+  background: #2e7d32;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: Georgia, serif;
+  cursor: pointer;
+}
+.btn-confirmar-plaza:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Botón enviar datos de reserva ── */
+.btn-enviar-datos {
+  width: 60%;
+  display: block;
+  margin: 28px auto 0;
+  padding: 13px 20px;
+  border-radius: 10px;
+  border: none;
+  background: #8B6914;
+  color: #ffffff;
+  font-size: 13px;
+  font-style: italic;
+  font-family: Georgia, serif;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+.btn-enviar-datos:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-enviar-datos:hover:not(:disabled) {
+  background: #7a5c10;
+}
+
+/* ── Fila de botones del modal ── */
+.modal-botones-fila {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/* ── Sí, Reservar — verde ── */
+.btn-modal-si {
+  flex: 1;
+  padding: 12px 8px;
+  border-radius: 8px;
+  border: none;
+  background: #2e7d32;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  font-family: Georgia, serif;
+  cursor: pointer;
+}
+.btn-modal-si:hover { background: #256427; }
+
+/* ── No, editar datos — ámbar ── */
+.btn-modal-no {
+  flex: 1;
+  padding: 12px 8px;
+  border-radius: 8px;
+  border: none;
+  background: #BA7517;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  font-family: Georgia, serif;
+  cursor: pointer;
+}
+.btn-modal-no:hover { background: #9e6312; }
+
+.exito-botones {
+  display: flex;
+  flex-direction: column;  /* ← uno debajo del otro */
+  gap: 10px;
+  margin-top: 24px;
+  align-items: center;
+}
+/* ── Ícono cancelado (X roja) ── */
+.exito-icono.cancelado {
+  margin-top: 75px;
+  background: #fce4e4;
+  color: #c62828;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* ── Ícono admin flotante ── */
+.admin-icono-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.25;        /* casi invisible — discreto */
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.admin-icono-btn:hover { opacity: 0.6; }
+
+/* ── Modal admin ── */
+.admin-modal-desc {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.admin-input-codigo {
+  text-align: center;
+  font-size: 22px;
+  letter-spacing: 8px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+.admin-input-codigo:focus { border-color: #8B6914; }
+.admin-error {
+  color: #c62828;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ── Panel admin ── */
+.admin-seccion {
+  margin-top: 24px;
+  background: white;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid #e0d8cc;
+}
+.admin-seccion h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: #333;
+}
+.admin-vacio {
+  font-size: 13px;
+  color: #999;
+  font-style: italic;
+}
+
+/* ── Panel admin header ── */
+.admin-fecha-hoy {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+/* ── Stats ── */
+.admin-stats {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.admin-stat-card {
+  flex: 1;
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.admin-stat-card.gris    { background: #ffffff; }
+.admin-stat-card.naranja { background: #f1dace; }
+.admin-stat-card.verde   { background: #ccead3; }
+.stat-num {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+}
+.admin-stat-card.naranja .stat-num { color: #c0622a; }
+.admin-stat-card.verde   .stat-num { color: #2e7d32; }
+.stat-label {
+  font-size: 10px;
+  color: #999;
+  letter-spacing: 1px;
+}
+
+/* ── Barra de vistas ── */
+.admin-barra {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.admin-barra-titulo {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+.admin-vistas { display: flex; gap: 6px; }
+.vista-btn {
+  width: 32px; height: 32px;
+  border-radius: 6px;
+  border: 0.5px solid #ddd;
+  background: white;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.vista-btn.activo {
+  background: #f0ede8;
+  border-color: #8B6914;
+}
+
+/* ── Tarjetas de reserva ── */
+.admin-lista { display: flex; flex-direction: column; gap: 12px; }
+.reserva-card {
+  display: flex;
+  background: white;
+  border-radius: 10px;
+  border: 0.5px solid #e0d8cc;
+  overflow: hidden;
+}
+.reserva-borde {
+  width: 5px;
+  flex-shrink: 0;
+}
+.reserva-borde.naranja { background: #c0622a; }
+.reserva-borde.verde   { background: #2e7d32; }
+.reserva-info {
+  flex: 1;
+  padding: 12px 12px 10px;
+}
+.reserva-nombre-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.reserva-nombre {
+  font-size: 15px;
+  font-weight: bold;
+  color: #222;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.reserva-arrow {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: #999;
+  cursor: pointer;
+  padding: 4px;
+}
+.reserva-detalles {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 8px;
+}
+.reserva-tags { display: flex; gap: 8px; align-items: center; }
+.tag-estado {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+.tag-estado.pendiente  { color: #c0622a; border-color: #c0622a; }
+.tag-estado.confirmado { color: #2e7d32; border-color: #2e7d32; }
+.tag-mesa {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  color: #666;
+}
+
+/* ── Menú desplegable ── */
+.reserva-menu {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 0.5px solid #eee;
+}
+.menu-opcion {
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: Georgia, serif;
+}
+.menu-opcion.verde { color: #2e7d32; }
+.menu-opcion.rojo  { color: #c62828; }
+
+/* ── Contacto cliente ── */
+.contacto-campo { margin-bottom: 4px; }
+
+/* ── Calendario ── */
+.cal-wrapper {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 8px;
+  border: 0.5px solid #e0d8cc;
+}
+.cal-label {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+}
+.cal-fecha-grande {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #222;
+}
+.cal-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.cal-mes-sel {
+  font-size: 13px;
+  border: none;
+  background: none;
+  color: #555;
+  cursor: pointer;
+  font-family: Georgia, serif;
+}
+.cal-nav-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #555;
+  padding: 2px 6px;
+}
+.cal-grid-dias {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.cal-dia-label {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  padding: 4px 0;
+}
+.cal-celda {
+  text-align: center;
+  font-size: 13px;
+  padding: 6px 2px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #333;
+}
+.cal-celda:hover:not(.vacia) { background: #f0ede8; }
+.cal-celda.activo {
+  background: #222;
+  color: white;
+  border-radius: 50%;
+}
+.cal-celda.vacia { pointer-events: none; }
+.cal-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 0.5px solid #eee;
+}
+.cal-footer-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: #555;
+  font-family: Georgia, serif;
+}
+.cal-footer-btn.azul { color: #1565c0; font-weight: bold; }

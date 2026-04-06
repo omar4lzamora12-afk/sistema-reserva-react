@@ -47,7 +47,7 @@ function ReservaWeb() {
       <h2 style={tituloPrincipal}>Nueva Reserva</h2>
 
       <div style={columnas}>
-        {/* --- FORMULARIO DE CLIENTE --- */}
+        {/* --- Formulario de Cliente --- */}
         <div style={formulario}>
           <h3 style={{ marginTop: 0 }}>Datos del Cliente</h3>
 
