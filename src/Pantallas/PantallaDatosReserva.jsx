@@ -13,14 +13,14 @@ export function PantallaDatosReserva({ onNext, onBack }) {
   const [loading,             setLoading]            = useState(false);
   const [error,               setError]              = useState(null);
 
-  // POST — patrón fetch p.368 + async/await B2.T6.3 p.394
+  // POST — patrón fetch + async/await
   const enviarReserva = () => {
     setLoading(true);
     setMostrarConfirmacion(false);
 
     // Simula el delay de envío (800ms)
     setTimeout(() => {
-      actualizarReserva({ cliente }); // guarda en Context — B2.T5.1
+      actualizarReserva({ cliente }); // guarda en Context 
       setLoading(false);
       onNext(); // avanza a PantallaExito
     }, 800);
@@ -37,7 +37,7 @@ export function PantallaDatosReserva({ onNext, onBack }) {
     <LayoutReserva showBack onBack={onBack}>
       <h1>Datos de Reserva</h1>
 
-      {CAMPOS.map(({ label, campo, type }) => (        // props dinámicas p.340
+      {CAMPOS.map(({ label, campo, type }) => (        // props dinámicas
         <div key={campo}>
           <label>{label}</label>
           <input type={type} value={cliente[campo]}
@@ -56,7 +56,7 @@ export function PantallaDatosReserva({ onNext, onBack }) {
         {loading ? "Enviando..." : "Enviar Datos Para Reserva"}
       </button>
 
-      {/* CompModal de confirmación — B2.T6.1 p.350 */}
+      {/* CompModal de confirmación */}
       {mostrarConfirmacion && (
         <CompModal
           title="¿Tus datos son correctos?"

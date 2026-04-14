@@ -8,12 +8,12 @@ export function PantallaSeleccionMesa({ onNext, onBack }) {
   const { reserva, actualizarReserva } = useReserva();
 
   const [mesas,        setMesas]        = useState([]);
-  const [loading,      setLoading]      = useState(false); // p.398
-  const [error,        setError]        = useState(null);  // p.398
+  const [loading,      setLoading]      = useState(false);
+  const [error,        setError]        = useState(null); 
   const [mesaTemp,     setMesaTemp]     = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
 
-  // GET de mesas — patrón idéntico al de B2.T6.3 p.394
+  // GET de mesas 
   const cargarMesas = () => {
     setLoading(true);
     setError(null);
@@ -45,7 +45,7 @@ export function PantallaSeleccionMesa({ onNext, onBack }) {
   }
 
   function confirmarMesa() {
-    actualizarReserva({ mesa: mesaTemp });  // al Context — B2.T5.1
+    actualizarReserva({ mesa: mesaTemp });  // al Context 
     setMostrarModal(false);
     onNext();
   }
@@ -57,7 +57,7 @@ export function PantallaSeleccionMesa({ onNext, onBack }) {
       <p className="mesa-hora">🕐 Hora: &nbsp;<strong>{reserva.hora}</strong></p>
       <p className="mesa-titulo">Elige tu plaza</p>
 
-      {/* Estado cargando — p.395 */}
+      {/* Estado cargando */}
       {loading && <p>Cargando mesas...</p>}
       {error   && <p className="error">{error}</p>}
 
@@ -78,7 +78,7 @@ export function PantallaSeleccionMesa({ onNext, onBack }) {
         </>
       )}
 
-      {/* CompModal reutilizable — B2.T6.1 p.350 */}
+      {/* CompModal reutilizable */}
       {mostrarModal && (
         <CompModal
           title="Excelente Plaza"

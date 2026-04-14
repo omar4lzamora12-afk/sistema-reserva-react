@@ -1,4 +1,3 @@
-// src/Components/TarjetaMesa.jsx
 export function TarjetaMesa({ mesa, seleccionada, onClick }) {
   const getEstado = () => {
     if (mesa.ocupada)   return "🎀";  // ocupada por otro
